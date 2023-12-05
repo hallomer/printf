@@ -11,48 +11,6 @@
 int handle_custom_string(va_list args, char *buffer, int *buffer_index)
 {
 	int count = 0, i;
-	char *str = va_arg(args, char *);
-
-	if (str == NULL)
-	{
-		str = "(null)";
-	}
-	for (i = 0; str[i] != '\0'; i++)
-	{
-		if (str[i] < 32 || str[i] >= 127)
-		{
-			buffer[(*buffer_index)++] = '\\';
-			buffer[(*buffer_index)++] = 'x';
-			sprintf(&buffer[*buffer_index], "%02X", (unsigned char)str[i]);
-			*buffer_index += 2;
-			count += 4;
-			}
-			else
-			{
-				buffer[(*buffer_index)++] = str[i];
-				count++;
-			}
-
-			if (*buffer_index == 1024)
-			{
-				write_buffer(buffer, buffer_index);
-			}
-	}
-
-	return (count);
-}
-
-/**
- * handle_custom_string - Handles S specifier
- * @args: arguments list
- * @buffer: buffer
- * @buffer_index: current index
- *
- * Return: count
-*/
-int handle_custom_string(va_list args, char *buffer, int *buffer_index)
-{
-	int count = 0, i;
 	char *str = va_arg(args, char *), hex[3];
 	unsigned char c;
 
