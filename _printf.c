@@ -30,7 +30,7 @@ int _printf(const char *format, ...)
 		return (-1);
 
 	va_start(args, format);
-	while (format && format[i] != '\0')
+	while (format[i] != '\0')
 	{
 		if (format[i] != '%')
 		{
@@ -68,43 +68,41 @@ int _printf(const char *format, ...)
 int handle_format(char specifier, va_list args,
 		char *buffer, int *buffer_index)
 {
-	int count = 0;
+	int count;
+	size_t num_handlers, i;
+	FormatSpecifier format_handlers[] = {
+		{'c', handle_char},
+		{'s', handle_string},
+		{'d', handle_decimal},
+		{'i', handle_decimal},
+		{'b', handle_binary},
+		{'u', handle_unsigned_int},
+		{'o', handle_octal},
+		{'x', handle_hexadecimal},
+		{'X', handle_hexadecimal_upper},
+		{'S', handle_custom_string},
+		{'p', handle_pointer},
+		{'r', handle_reversed_string},
+		{'R', handle_rot13},
+	};
 
-	switch (specifier)
+	if (specifier == '%')
 	{
-		case 'c':
-			count += handle_char(args, buffer, buffer_index);
-			break;
-		case 's':
-			count += handle_string(args, buffer, buffer_index);
-			break;
-		case '%':
-			count += handle_precent(buffer, buffer_index);
-			break;
-		case 'd':
-		case 'i':
-			count += handle_decimal(args, buffer, buffer_index);
-			break;
-		case 'b':
-			count += handle_binary(args, buffer, buffer_index);
-			break;
-		case 'u':
-			count += handle_unsigned_int(args, buffer, buffer_index);
-			break;
-		case 'o':
-			count += handle_octal(args, buffer, buffer_index);
-			break;
-		case 'x':
-			count += handle_hexadecimal(args, buffer, buffer_index);
-			break;
-		case 'X':
-			count += handle_hexadecimal_upper(args, buffer, buffer_index);
-			break;
-		default:
-			count += handle_unknown(specifier, buffer, buffer_index);
-			break;
+		return (handle_percent(buffer, buffer_index));
 	}
 
+	num_handlers = sizeof(format_handlers) / sizeof(FormatSpecifier);
+
+	for (i = 0; i < num_handlers; i++)
+	{
+		if (format_handlers[i].specifier == specifier)
+		{
+			count = format_handlers[i].handler(args, buffer, buffer_index);
+			return (count);
+		}
+	}
+
+	count = handle_unknown(specifier, buffer, buffer_index);
 	return (count);
 }
 

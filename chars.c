@@ -61,3 +61,40 @@ int handle_precent(char *buffer, int *buffer_index)
 
 	return (1);
 }
+
+/**
+ * handle_pointer - Handles p specifier
+ * @args: arguments list
+ * @buffer: buffer
+ * @buffer_index: current index
+ *
+ * Return: count
+*/
+int handle_pointer(va_list args, char *buffer, int *buffer_index)
+{
+	void *ptr = va_arg(args, void*);
+	unsigned long address = (unsigned long)ptr, temp, digit_value;
+	int count = 0, num_digits, i;
+	char hex_digits[] = "0123456789abcdef";
+
+	buffer[(*buffer_index)++] = '0';
+	buffer[(*buffer_index)++] = 'x';
+	count += 2;
+
+	num_digits = 0;
+	temp = address;
+	while (temp != 0)
+	{
+		temp /= 16;
+		num_digits++;
+	}
+
+	for (i = num_digits - 1; i >= 0; i--)
+	{
+		digit_value = (address >> (i * 4)) & 0xf;
+		buffer[(*buffer_index)++] = hex_digits[digit_value];
+		count++;
+	}
+
+	return (count);
+}
