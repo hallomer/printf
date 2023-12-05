@@ -53,7 +53,7 @@ int handle_string(va_list args, char *buffer, int *buffer_index)
  *
  * Return: count
 */
-int handle_precent(char *buffer, int *buffer_index)
+int handle_percent(char *buffer, int *buffer_index)
 {
 	buffer[(*buffer_index)++] = '%';
 	if (*buffer_index == 1024)

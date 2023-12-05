@@ -51,6 +51,37 @@ int handle_custom_string(va_list args, char *buffer, int *buffer_index)
 }
 
 /**
+ * handle_reversed_string - Handles r specifier
+ * @args: arguments list
+ * @buffer: buffer
+ * @buffer_index: current index
+ *
+ * Return: count
+*/
+int handle_reversed_string(va_list args, char *buffer, int *buffer_index)
+{
+	char *str = va_arg(args, char *);
+	int len = 0, i;
+
+	while (str[len] != '\0')
+	{
+		len++;
+	}
+
+	for (i = len - 1; i >= 0; i--)
+	{
+		buffer[(*buffer_index)++] = str[i];
+
+		if (*buffer_index == 1024)
+		{
+			write_buffer(buffer, buffer_index);
+		}
+	}
+
+	return (len);
+}
+
+/**
  * handle_rot13 - Handles R specifier
  * @args: arguments list
  * @buffer: buffer
