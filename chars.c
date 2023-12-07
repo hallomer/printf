@@ -47,7 +47,7 @@ int handle_string(va_list args, char *buffer, int *buffer_index)
 }
 
 /**
- * handle_precent - Handles % specifier
+ * handle_percent - Handles % specifier
  * @buffer: buffer
  * @buffer_index: current index
  *
